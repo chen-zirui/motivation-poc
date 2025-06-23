@@ -1,23 +1,25 @@
 package edu.vision.se;
 
 import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Test;
-import org.springframework.security.access.AccessDecisionVoter;
-import org.springframework.security.access.ConfigAttribute;
-import org.springframework.security.access.SecurityConfig;
-import org.springframework.security.access.vote.AuthenticatedVoter;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.vote.AccessDecisionVoter;
+import org.springframework.security.ConfigAttribute;
+import org.springframework.security.ConfigAttributeDefinition;
+import org.springframework.security.providers.anonymous.AnonymousAuthenticationToken;
+import org.springframework.security.Authentication;
+import org.springframework.security.GrantedAuthority;
+import org.springframework.security.GrantedAuthorityImpl;
+import org.springframework.security.vote.AuthenticatedVoter;
+
 
 public class CVE_2024_22257 {
 
     @Test
     public void testAnonymousWorks() {
         AuthenticatedVoter voter = new AuthenticatedVoter();
-        List<ConfigAttribute> def = SecurityConfig.createList(AuthenticatedVoter.IS_AUTHENTICATED_ANONYMOUSLY);
+        ConfigAttributeDefinition def = new ConfigAttributeDefinition(AuthenticatedVoter.IS_AUTHENTICATED_ANONYMOUSLY);
         validateReturnValue(voter.vote(null, null, def));
     }
 
@@ -26,6 +28,7 @@ public class CVE_2024_22257 {
     }
 
     public Authentication createAnonymous() {
-        return new AnonymousAuthenticationToken("ignored", "ignored", AuthorityUtils.createAuthorityList("ignored"));
+        GrantedAuthority[] authorities = new GrantedAuthority[] {new GrantedAuthorityImpl("ignored")};
+        return new AnonymousAuthenticationToken("ignored", "ignored", authorities);
     }
 }
