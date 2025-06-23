@@ -12,7 +12,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 
-public class Testcase1 {
+public class CVE_2024_22257 {
 
     @Test
     public void testAnonymousWorks() {
