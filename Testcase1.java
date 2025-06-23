@@ -2,6 +2,7 @@ package edu.vision.se;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Test;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.ConfigAttribute;
@@ -11,7 +12,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 
-public class CVE_2024_22257 {
+public class Testcase1 {
 
     @Test
     public void testAnonymousWorks() {
@@ -21,7 +22,7 @@ public class CVE_2024_22257 {
     }
 
     public void validateReturnValue(int result) {
-        org.junit.Assert.assertEquals(AccessDecisionVoter.ACCESS_DENIED, result);
+        assertThat(result).isEqualTo(AccessDecisionVoter.ACCESS_DENIED);
     }
 
     public Authentication createAnonymous() {
