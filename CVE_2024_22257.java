@@ -4,20 +4,20 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Test;
-import org.springframework.security.access.AccessDecisionVoter;
-import org.springframework.security.access.ConfigAttribute;
-import org.springframework.security.access.SecurityConfig;
-import org.springframework.security.access.vote.AuthenticatedVoter;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.vote.AccessDecisionVoter;
+import org.springframework.security.ConfigAttribute; // Updated import
+import org.springframework.security.ConfigAttributeDefinition; // New import
+import org.springframework.security.vote.AuthenticatedVoter; // Updated import
+import org.springframework.security.providers.anonymous.AnonymousAuthenticationToken;
+import org.springframework.security.Authentication; // Fixed import
+import org.springframework.security.util.AuthorityUtils; // Updated import
 
 public class CVE_2024_22257 {
 
     @Test
     public void testAnonymousWorks() {
         AuthenticatedVoter voter = new AuthenticatedVoter();
-        List<ConfigAttribute> def = SecurityConfig.createList(AuthenticatedVoter.IS_AUTHENTICATED_ANONYMOUSLY);
+        ConfigAttributeDefinition def = new ConfigAttributeDefinition("IS_AUTHENTICATED_ANONYMOUSLY"); // Fixed line
         validateReturnValue(voter.vote(null, null, def));
     }
 
@@ -26,6 +26,6 @@ public class CVE_2024_22257 {
     }
 
     public Authentication createAnonymous() {
-        return new AnonymousAuthenticationToken("ignored", "ignored", AuthorityUtils.createAuthorityList("ignored"));
+        return new AnonymousAuthenticationToken("ignored", "ignored", AuthorityUtils.commaSeparatedStringToAuthorityArray("ignored"));
     }
 }
